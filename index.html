@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ink Arcade</title>
+<meta name="description" content="狙って撃つだけ。ブラウザで遊べるインク系シューティング2本立て。Claude Opus 5.5 と一緒に作りました。">
+<meta property="og:title" content="Ink Arcade">
+<meta property="og:description" content="狙って撃つだけ。ブラウザで遊べるインク系シューティング2本立て。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='30' fill='%231b1030'/><circle cx='32' cy='32' r='24' fill='%231fd1ff'/><circle cx='32' cy='32' r='16' fill='%23fff8ec'/><circle cx='32' cy='32' r='9' fill='%23ff3d8b'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+<style>
+  :root{ --a:#1fd1ff; --b:#ff3d8b; --c:#ffd23b; --d:#ff7b1c; --g:#b6ff3b; --ink:#1b1030; --paper:#fff8ec; }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#5b3fa8 0%,#2a1b4a 55%,#140b26 100%) fixed;
+    color:var(--paper);font-family:"Dela Gothic One",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;padding:48px 16px 32px}
+  h1{font-size:clamp(48px,12vw,112px);margin:0;letter-spacing:3px;line-height:1;
+    background:linear-gradient(90deg,var(--a),var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(5px 5px 0 var(--ink));transform:rotate(-3deg)}
+  .lead{font-family:system-ui,sans-serif;font-weight:700;margin:20px 0 36px;opacity:.9;text-align:center}
+  .games{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px;width:min(760px,100%)}
+  .card{display:block;text-decoration:none;color:var(--ink);background:var(--paper);border:4px solid var(--ink);border-radius:22px;
+    box-shadow:8px 8px 0 var(--ink);overflow:hidden;transition:transform .12s, box-shadow .12s}
+  .card:hover{transform:translate(-3px,-3px) rotate(-.6deg);box-shadow:11px 11px 0 var(--ink)}
+  .card:active{transform:translate(4px,4px);box-shadow:3px 3px 0 var(--ink)}
+  .art{height:190px;position:relative;overflow:hidden;border-bottom:4px solid var(--ink)}
+  .body{padding:16px 20px 20px}
+  .body h2{margin:0 0 6px;font-size:28px}
+  .body p{margin:0;font-family:system-ui,sans-serif;font-weight:700;font-size:14px;line-height:1.6;color:#4a3d63}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+  .tags span{font-size:11px;padding:3px 10px;border-radius:20px;border:2px solid var(--ink)}
+  .play{margin-top:14px;display:inline-block;font-size:18px;padding:8px 26px;border:3px solid var(--ink);border-radius:30px;box-shadow:3px 3px 0 var(--ink)}
+  /* Ink Dash art: splats */
+  .dash{background:#8f71d6}
+  .dash i{position:absolute;border-radius:50%}
+  /* Ink Rail art: rail + targets */
+  .rail{background:linear-gradient(#3b1f7a,#c85cc9 60%,#ffc38a)}
+  .rail .track{position:absolute;left:50%;bottom:-10px;width:170px;height:150px;transform:translateX(-50%);
+    background:#2b2140;clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);border-bottom:none}
+  .rail .track::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0 18px,var(--c) 18px 24px);
+    clip-path:polygon(48% 0,52% 0,62% 100%,38% 100%);opacity:.9}
+  .rail .tgt{position:absolute;border-radius:50%;border:3px solid var(--ink);
+    background:radial-gradient(circle,var(--c) 0 16%,var(--paper) 17% 33%,var(--b) 34% 52%,var(--paper) 53% 70%,var(--a) 71%)}
+  footer{margin-top:44px;font-family:system-ui,sans-serif;font-size:13px;opacity:.75;text-align:center;line-height:1.8}
+  footer a{color:var(--c)}
+</style>
+</head>
+<body>
+  <h1>INK ARCADE</h1>
+  <p class="lead">狙って撃つだけ。ブラウザでそのまま遊べるシューティング2本立て。</p>
+
+  <main class="games">
+    <a class="card" href="ink-rail.html">
+      <div class="art rail" aria-hidden="true">
+        <div class="track"></div>
+        <div class="tgt" style="width:74px;height:74px;left:12%;top:26%"></div>
+        <div class="tgt" style="width:46px;height:46px;left:70%;top:18%"></div>
+        <div class="tgt" style="width:30px;height:30px;left:58%;top:52%"></div>
+        <div class="tgt" style="width:96px;height:96px;right:-20px;top:58%"></div>
+      </div>
+      <div class="body">
+        <h2>INK RAIL</h2>
+        <p>レールの上を勝手に進む3Dレールシューター。弾はBGMのビートに合わせて出て、コンボが続くと音階が上がる。最後にデカいのが来ます。</p>
+        <div class="tags"><span>3D</span><span>オート射撃</span><span>4段階の難易度</span><span>NEW</span></div>
+        <span class="play" style="background:var(--c)">PLAY ▶</span>
+      </div>
+    </a>
+    <a class="card" href="ink-dash.html">
+      <div class="art dash" aria-hidden="true">
+        <i style="width:140px;height:120px;left:-20px;top:20px;background:var(--a)"></i>
+        <i style="width:36px;height:36px;left:120px;top:30px;background:var(--a)"></i>
+        <i style="width:170px;height:150px;right:-30px;bottom:-40px;background:var(--d)"></i>
+        <i style="width:30px;height:30px;right:150px;bottom:40px;background:var(--d)"></i>
+        <i style="width:80px;height:70px;left:44%;top:60px;background:var(--d)"></i>
+        <i style="width:60px;height:56px;left:30%;bottom:-10px;background:var(--a)"></i>
+      </div>
+      <div class="body">
+        <h2>INK DASH</h2>
+        <p>キャラは勝手に走り回る。あなたは狙って撃つだけ。90秒で多く塗ったチームの勝ち。</p>
+        <div class="tags"><span>3D</span><span>陣取り</span><span>90秒</span></div>
+        <span class="play" style="background:var(--a)">PLAY ▶</span>
+      </div>
+    </a>
+  </main>
+
+  <footer>
+    マウス／タッチで遊べます（音が出ます）<br>
+    Made by たぬ with Claude Opus 5.5 (Claude Code) ・ <a href="https://github.com/tanuu5/ink-arcade">GitHub</a>
+  </footer>
+</body>
+</html>
